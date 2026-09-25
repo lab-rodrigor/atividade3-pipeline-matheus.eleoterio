@@ -25,9 +25,12 @@ jobs:
       - name: 1. Derrubar a topologia antiga
         run: |
           # 'rm -f' para e remove os containers separadamente. '|| true' ignora erros.
-          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker rm -f banco || true
-          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker rm -f api || true
-          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker rm -f front || true
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker stop banco || true
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker rm banco || true
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker stop api || true
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker rm api || true
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker stop front || true
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker rm front || true
 
       - name: 2. Criar as duas redes e o volume
         run: |
