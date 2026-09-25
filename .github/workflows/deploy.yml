@@ -37,12 +37,12 @@ jobs:
           # Tenta criar as redes e volume; ignora o erro se eles já existirem.
           ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker network create dados --interna || true
           ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker network create web || true
-          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker volume create pgdata || true
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker volume create meupgdata || true
 
       - name: 3. Subir banco, API e front
         run: |
           # a. Subir o banco
-          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker run -d --name banco --network dados -v pgdata:/var/lib/postgresql/data -e POSTGRES_PASSWORD=${{ secrets.DB_SENHA }} -e POSTGRES_DB=pokedex postgres:17-alpine
+          ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker run -d --name banco --network dados -v meupgdata:/var/lib/postgresql/data -e POSTGRES_PASSWORD=${{ secrets.DB_SENHA }} -e POSTGRES_DB=pokedex postgres:17-alpine
           
           # b. Subir a API
           ssh gr-${{ env.SLUG }}@gr.lab.ayty.org gr-docker run -d --name api --network dados -e POSTGRES_HOST=gr-${{ env.SLUG }}-banco -e POSTGRES_DB=pokedex -e POSTGRES_PASSWORD=${{ secrets.DB_SENHA }} gr-atv2-api:1
